@@ -22,6 +22,9 @@ require __DIR__.'/auth.php';
 
 Route::middleware('admin')->group( function(){
     Route::get('/admin/dashboard', [AdminController::class, 'adminDashboard'])->name('admin.dashboard');
+    Route::get('/admin/profile', [AdminController::class, 'adminProfile'])->name('admin.profile');
+    Route::post('/admin/profile/update', [AdminController::class, 'adminProfileUpdate'])->name('admin.profile.update');
+
 });
 
 Route::get('/admin/login', [AdminController::class, 'adminLogin'])->name('admin.login');

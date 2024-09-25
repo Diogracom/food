@@ -98,4 +98,50 @@ class AdminController extends Controller
         return redirect()->route('admin.login')->with('success', 'Password Reset Successfully');
     }
 
+    public function adminProfile(){
+       $id = Auth::guard('admin')->id();
+       $profile_data = Admin::where('id', $id)->first();
+
+       return view('admin.admin_profile', compact('profile_data'));
+
+    }
+
+    public function adminProfileUpdate(Request $request){
+
+        $id = Auth::guard('admin')->id();
+        $data = Admin::where('id', $id)->first();
+
+        $data->name = $request->nname;
+        $data->email = $request->email;
+        $data->phone = $request->phone;
+        $data->address = $request->address;
+
+        $oldPhotoPath = $data->photo;
+
+        if($request->hasFile('photo')){
+            $file = $request->file('photo');
+            $file_name = time().'.'.getClientOriginalxtension();
+            $file->move(public_path('upload/admin_photo'),$file_name);
+            $data->photo = $file_name;
+
+            if($oldPhotoPath !== $file_name){
+                $this->deleteOldPhoto($oldPhotoPath);
+            }
+        }
+
+        $data->save();    
+        return redirect()->back();
+
+    }
+
+    public function deleteOldPhoto(string $oldPhotoPath):void{
+        $fullPath = public_path('upload/admin_photo/'.$oldPhotoPath);
+        if(file_exists($fullPath)){
+            unlink($fullPath);
+        }
+    }
+
 }
+
+
+
