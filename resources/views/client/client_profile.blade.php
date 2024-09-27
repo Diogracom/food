@@ -1,4 +1,4 @@
-@extends('admin.admin_dashboard')
+@extends('client.client_dashboard')
 @section('main')
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 <div class="main-content">
@@ -32,7 +32,7 @@
                                     <div class="d-flex align-items-start mt-3 mt-sm-0">
                                         <div class="flex-shrink-0">
                                             <div class="avatar-xl me-3">
-                                                <img src="{{ (!empty($profile_data->photo)) ? url('upload/admin_photo/'.$profile_data->photo) : url('upload/no_image.jpg')}} " alt="" class="img-fluid rounded-circle d-block">
+                                                <img src="{{ (!empty($profile_data->photo)) ? url('upload/client_photo/'.$profile_data->photo) : url('upload/no_image.jpg')}} " alt="" class="img-fluid rounded-circle d-block">
                                             </div>
                                         </div>
                                         <div class="flex-grow-1">
@@ -68,7 +68,7 @@
                             <div class="col-12">
                                 <div class="card">                                   
                                     <div class="card-body p-4">
-                                      <form  action="{{route('admin.profile.update')}}" method="post" enctype="multipart/form-data">
+                                      <form  action="{{route('client.profile.update')}}" method="post" enctype="multipart/form-data">
                                         @csrf
                                             <div class="row">
                                                 <div class="col-lg-6">
@@ -101,7 +101,7 @@
                                                             <input class="form-control" name="photo" type="file"  id="image" value ="{{$profile_data->photo}}">
                                                         </div>  
                                                         <div class="mb-3">
-                                                        <img src="{{ (!empty($profile_data->photo)) ? url('upload/admin_photo/'.$profile_data->photo) : url('upload/no_image.jpg')}} " alt="" 
+                                                        <img src="{{ (!empty($profile_data->photo)) ? url('upload/client_photo/'.$profile_data->photo) : url('upload/no_image.jpg')}} " alt="" 
                                                         class="rounded-circle bg-primary d-block p-1" id="showImage" width="110">
                                                                                                     
                                                         </div>  

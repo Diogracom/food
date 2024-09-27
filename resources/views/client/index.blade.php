@@ -37,7 +37,7 @@
            @yield('main')
         </div>
          <!-- Right Sidebar -->
-       @include('admin.body.rightbar')
+       @include('client.body.rightbar')
         <!-- /Right-bar -->
 
         <!-- Right bar overlay-->

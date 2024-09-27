@@ -111,7 +111,7 @@ class AdminController extends Controller
         $id = Auth::guard('admin')->id();
         $data = Admin::where('id', $id)->first();
 
-        $data->name = $request->nname;
+        $data->name = $request->name;
         $data->email = $request->email;
         $data->phone = $request->phone;
         $data->address = $request->address;
@@ -120,17 +120,23 @@ class AdminController extends Controller
 
         if($request->hasFile('photo')){
             $file = $request->file('photo');
-            $file_name = time().'.'.getClientOriginalxtension();
+            $file_name = time().'.'.$file->getClientOriginalExtension();
             $file->move(public_path('upload/admin_photo'),$file_name);
             $data->photo = $file_name;
 
-            if($oldPhotoPath !== $file_name){
+            if($oldPhotoPath && $oldPhotoPath !== $file_name){
                 $this->deleteOldPhoto($oldPhotoPath);
             }
         }
 
-        $data->save();    
-        return redirect()->back();
+        $data->save();  
+        
+        $noty = array(
+            'message'=> 'Profile update Successfully',
+            'alert-type'=>'success'
+        );  
+        
+        return redirect()->back()->with($noty);
 
     }
 
@@ -139,6 +145,46 @@ class AdminController extends Controller
         if(file_exists($fullPath)){
             unlink($fullPath);
         }
+    }
+    // end of image unlink function
+
+    public function adminChangePassword(){
+        $id = Auth::guard('admin')->id();
+        $profile_data = Admin::find($id)->first();
+        return view('admin.admin_change_password', compact('profile_data'));
+    }
+
+    public function adminChangePasswordNew(Request $request){
+        $request->validate([
+            "current_password" => "required",
+            "new_password" => "required",
+            "confirm_password" => "required|same:new_password"
+        ]);
+
+        $admin = Auth::guard('admin')->user();
+
+        if(!Hash::check($admin->password, $request->current_password)){
+
+            $noty = array(
+                'message'=> 'Current Password Incorrect',
+                'alert-type'=>'error'
+            ); 
+
+            return back()->with($noty);            
+        }
+
+        Admin::whereId($admin->id)->update([
+            'password' => Hash::make($request->new_password)
+        ]);
+
+        $noty = array(
+            'message'=> 'Password Changed Successfully',
+            'alert-type'=>'success'
+        ); 
+
+        return back()->with($noty);       
+
+        
     }
 
 }
